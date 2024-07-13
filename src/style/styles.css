@@ -1,6 +1,5 @@
 .container {
-  width: 100%;
-  height: 100%;
+  height: 100vh;
 }
 
 footer {
@@ -16,4 +15,12 @@ footer > p {
   align-items: center;
   gap: 5px;
   font-size: 15px;
+}
+
+.page-title {
+}
+
+.wrapper {
+  display: flex;
+  justify-content: center;
 }
