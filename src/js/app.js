@@ -15,24 +15,38 @@ function displayWeather(weatherData) {
   const location = weatherData.resolvedAddress;
   const currentConditions = weatherData.currentConditions;
 
-  const weatherCard = document.getElementById("weather-card");
-  weatherCard.innerHTML = `
+  const tempC = `${currentConditions.temp}`;
+  const tempF = (tempC * 9) / 5 + 32;
+  const tempF_round = tempF.toFixed(1);
+
+  const feelslikeC = `${currentConditions.feelslike}`;
+  const feelslikeF = (feelslikeC * 9) / 5 + 32;
+  const feelslikeF_round = feelslikeF.toFixed(1);
+
+  let isCelsius = true;
+
+  const weatherCardC = document.getElementById("weather-card");
+
+  function updateWeatherCard() {
+    weatherCardC.innerHTML = `
     <h2>Weather in ${location}</h2>
-    <p>Temperature: ${currentConditions.temp}°C</p>
-    <p>Thermal Sensation: ${currentConditions.feelslike}°C</p>
+    <p>Temperature: ${isCelsius ? `${tempC}°C` : `${tempF_round}°F`}</p>
+    <p>Thermal Sensation: ${
+      isCelsius ? `${feelslikeC}°C` : `${feelslikeF_round}°F`
+    }</p>
     <p>Conditions: ${currentConditions.conditions}</p>
     <p>Humidity: ${currentConditions.humidity}%</p>
     <button id="toggle-button">Toggle °C/°F</button>
   `;
 
-  //Function to toggle celsius to weirdo
-  const toggleButton = document.getElementById("toggle-button");
-  const tempC = `${currentConditions.temp}`;
-  const tempF = (tempC * 9) / 5 + 32;
-  console.log(tempC);
-  console.log(tempF);
+    const toggleButton = document.getElementById("toggle-button");
+    toggleButton.addEventListener("click", () => {
+      isCelsius = !isCelsius;
+      updateWeatherCard();
+    });
+  }
 
-  toggleButton.addEventListener("click", () => {});
+  updateWeatherCard();
 }
 
 async function callAction(locationName) {
