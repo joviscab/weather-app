@@ -1,27 +1,27 @@
 import "../style/styles.css";
 import { getWeather } from "./weather";
 
-//Function to get the location in the search-field
+// Get the location in the search-field
 const submitButton = document.getElementById("submit-button");
 
 submitButton.addEventListener("click", () => {
   const locationNameValue = document.getElementById("search-field");
   let locationName = locationNameValue.value;
-  callAction(locationName);
+  getLocation(locationName);
 });
 
-//Function to display the weather data
+// Function to display the weather data
 function displayWeather(weatherData) {
   const location = weatherData.resolvedAddress;
   const currentConditions = weatherData.currentConditions;
 
   const tempC = `${currentConditions.temp}`;
   const tempF = (tempC * 9) / 5 + 32;
-  const tempF_round = tempF.toFixed(1);
+  const tempF_round = tempF.toFixed(0);
 
   const feelslikeC = `${currentConditions.feelslike}`;
   const feelslikeF = (feelslikeC * 9) / 5 + 32;
-  const feelslikeF_round = feelslikeF.toFixed(1);
+  const feelslikeF_round = feelslikeF.toFixed(0);
 
   let isCelsius = true;
 
@@ -47,9 +47,12 @@ function displayWeather(weatherData) {
   }
 
   updateWeatherCard();
+
+  // Fetch the image using current weather conditions
+  getImage(currentConditions.conditions);
 }
 
-async function callAction(locationName) {
+async function getLocation(locationName) {
   const location = locationName;
   console.log(location);
   if (location) {
@@ -63,4 +66,26 @@ async function callAction(locationName) {
   } else {
     console.log("No location provided");
   }
+}
+
+// Function to fetch the weather image
+function getImage(conditions) {
+  fetch(
+    `https://api.giphy.com/v1/gifs/translate?api_key=9Mm264ds4pmd0H3XloUG3g1NRA5sIScY&s=${conditions}`,
+    {
+      mode: "cors",
+    }
+  )
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (response) {
+      document.body.style.backgroundImage = `url(${response.data.images.original.url})`;
+      document.body.style.backgroundSize = "cover";
+      document.body.style.backgroundPosition = "center";
+      document.body.style.backgroundRepeat = "no-repeat";
+    })
+    .catch(function (error) {
+      console.error("Error fetching the weather image:", error);
+    });
 }

@@ -6,7 +6,6 @@ async function getWeather(location) {
   );
   const weatherData = await response.json();
   return weatherData;
-  console.log(weatherData);
 }
 
 export { getWeather };
